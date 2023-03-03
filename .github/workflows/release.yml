@@ -14,23 +14,30 @@ jobs:
       - uses: actions/checkout@v2
       - uses: fregante/setup-git-user@v1
       # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: 18
           registry-url: "https://registry.npmjs.org"
-          scope: "@roedoejet"
+          scope: "@readalongs"
       - run: npm install
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
+      - name: Cypress run for web-component
+        uses: cypress-io/github-action@v5
         with:
-          working-directory: ./packages/web-component
-          start: npm run test-servers
-          wait-on: npm run wait-for-test-server
+          install: false
+          start: |
+            npx nx serve web-component
+            npx nx serve-test-data web-component
+          wait-on: "http://localhost:3333/build/web-component.esm.js"
+          command: npx nx test:once web-component
       - run: cd ./packages/web-component && npm version patch
-      - run: nx build web-component && nx prepublish web-component && nx bundle web-component && nx build ngx-web-component
+      - run: cd ./packages/ngx-web-component && npm version patch
+      - run: npx nx build web-component && npx nx prepublish web-component && npx nx bundle web-component && npx nx build ngx-web-component
       - run: |
-          cd dist/packages/web-component && npm publish
-          cd dist/packages/ngx-web-component && npm publish
+          cd dist/packages/web-component && npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: |
+          cd dist/packages/ngx-web-component && npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Determine tag
@@ -53,7 +60,7 @@ jobs:
           body: ${{ steps.tag_version.outputs.changelog }}
       - name: Commit bumped version and merge with main
         run: |
-          git add package.json packages/*/package.json
+          git add package.json packages/*/package.json packages/studio-web/src/assets/bundle.js packages/studio-web/src/assets/fonts.b64.css
           git commit -m "chore: commit version"
           git fetch --unshallow
           git push origin release

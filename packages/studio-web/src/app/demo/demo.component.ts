@@ -10,6 +10,7 @@ import { B64Service } from "../b64.service";
 import { compress } from "image-conversion";
 import { RasService, SupportedOutputs } from "../ras.service";
 import { saveAs } from "file-saver";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-demo",
@@ -32,7 +33,7 @@ export class DemoComponent implements OnDestroy, OnInit {
     { value: "vtt", display: $localize`WebVTT Subtitles` },
   ];
   selectedOutputFormat: SupportedOutputs | string = "html";
-  language: "eng" | "fra" = "eng";
+  language: "eng" | "fra" | "spa" = "eng";
   unsubscribe$ = new Subject<void>();
   constructor(
     public b64Service: B64Service,
@@ -42,6 +43,8 @@ export class DemoComponent implements OnDestroy, OnInit {
     // If we do more languages, this should be a lookup table
     if ($localize.locale == "fr") {
       this.language = "fra";
+    } else if ($localize.locale == "es") {
+      this.language = "spa";
     }
   }
 
@@ -168,7 +171,7 @@ export class DemoComponent implements OnDestroy, OnInit {
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
         <title>${this.slots.title}</title>
         <link rel="stylesheet" href="${this.b64Inputs[2][1]}">
-        <script src="${this.b64Inputs[2][0]}"></script>
+        <script src="${this.b64Inputs[2][0]}" version="${environment.packageJson.singleFileBundleVersion}" timestamp="${environment.packageJson.singleFileBundleTimestamp}"></script>
       </head>
       <body>
           <read-along href="data:application/readalong+xml;base64,${b64ras}" audio="${this.b64Inputs[0]}" use-assets-folder="false">
