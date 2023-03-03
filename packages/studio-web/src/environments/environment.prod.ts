@@ -2,6 +2,7 @@ import packageJson from "../../package.json";
 
 export const environment = {
   production: true,
-  apiBaseURL: "https://readalong-studio.herokuapp.com/api/v1",
+  apiBaseURL: "https://ras-api.algonquianlanguages.ca/api/v1",
+  origin: "https://ras.algonquianlanguages.ca/",
   packageJson: packageJson,
 };
