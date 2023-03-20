@@ -1,5 +1,12 @@
 # ReadAlongs Web App Suite
 
+[![Publish Status](https://github.com/readalongs/Web-Component/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/ReadAlongs/Web-Component/actions)
+[![Test Status](https://github.com/readalongs/Web-Component/actions/workflows/end-to-end-tests.yml/badge.svg?branch=main)](https://github.com/ReadAlongs/Web-Component/actions)
+[![GitHub license](https://img.shields.io/github/license/ReadAlongs/Web-Component)](https://github.com/ReadAlongs/Web-Component/blob/main/LICENSE)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/ReadAlongs/Web-Component)
+[![web-component release](https://img.shields.io/npm/v/@readalongs/web-component)](https://www.npmjs.com/package/@readalongs/web-component)
+[![ngx-web-component release](https://img.shields.io/npm/v/@readalongs/ngx-web-component)](https://www.npmjs.com/package/@readalongs/ngx-web-component)
+
 Interactive story telling embeddable into any website!
 
 <!-- TODO: put an animated GIF here, showing it off! -->
@@ -74,17 +81,17 @@ To run Studio-Web, you first have to build the web-component:
 
     nx build web-component --watch
 
-Then serve Studio-Web by running:
+Then serve Studio-Web by running (on port 4200 by default, use `--port=nnnn` to override):
 
     nx serve studio-web
 
-Ou en français:
+Ou en français (sur le port 4201 par défaut):
 
     nx serve studio-web --configuration=development-fr
 
 There are separate production and development serving configurations
 for each interface language, so you may for instance also use
-`development-en`, `production-en`,`development-es`, `production-es`, `production-fr`, etc for
+`development-en`, `production-en`, `development-es`, `production-es`, `production-fr`, etc for
 `--configuration` above. Note that these configurations are _only_
 for the `serve` command. To build for deployment, see
 [below](#studio-web-2).
@@ -167,17 +174,13 @@ To publish the web component, first you must belong to the [@readalongs organiza
     nx build web-component
     nx build ngx-web-component
 
-Run the prepublish step for web-component:
-
-    nx prepublish web-component
-
 Run the bundler for single-file html exports:
 
     nx bundle web-component
 
 Alternatively run together as:
 
-    nx run-many --targets=build,prepublish,bundle --projects=web-component,ngx-web-component --parallel 1
+    nx run-many --targets=build,bundle --projects=web-component,ngx-web-component --parallel 1
 
 Then, go to the directory and publish:
 
